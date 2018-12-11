@@ -18,20 +18,27 @@ class WordSaladGeneration:
     """Form a complex number.
 
        generate:
-       text - a string value
+       filename - string type path of the input file
        
-       **assuming the text is lower cased 
+       **assuming the text is lower cased and no punctuations or special characters
        
-       returns randomly shuffled words of the given text
+       returns an output file "word_salad.txt" 
+       Randomly shuffled words of the given input file text
        Split the words using whitespace as delimiter. 
        Randomly shuffles the list of words in place.
        Finally joins all the words with ' ' space 
        
       
     """
-    def generate(self, text):
+    
+    def generate(self, file_name):
+        with open(file_name, 'r') as file:
+            text = file.read().replace('\n', ' ')
+
         random.seed(self.random_state)
         words = text.split()
         random.shuffle(words)
         word_salad = ' '.join(words)
-        return word_salad
+
+        f = open("word_salad.txt", "a")
+        f.write(word_salad)
