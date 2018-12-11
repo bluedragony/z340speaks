@@ -1,6 +1,55 @@
 import os
 import sys
 
+import random
+
+
+class WordSaladGeneration:
+    random_state = None
+
+    """WordSaladGeneration
+
+       init:
+       random_state - an integer number to give as a seed to random number generator (default = 1)
+
+       **for a given random_state we always get the same output
+       **if we change the random state we will get a different output
+    """
+
+    def __init__(self, random_state=1):
+        self.random_state = random_state
+
+    """Form a complex number.
+
+       generate:
+       filename - string type path of the input file
+
+       **assuming the text is lower cased and no punctuations or special characters
+
+       returns an output file "word_salad.txt" 
+       Randomly shuffled words of the given input file text
+       Split the words using whitespace as delimiter. 
+       Randomly shuffles the list of words in place.
+       Finally joins all the words with ' ' space 
+
+
+    """
+
+    def generate(self, in_file, out_file):
+        random.seed(self.random_state)
+        in_fh = open(in_file)
+        out_fh = open(out_file, 'w')
+        while True:
+            line = in_fh.readline().replace('\n', ' ')
+            if not line:
+                break
+            words = line.split()
+            random.shuffle(words)
+            word_salad = ' '.join(words) + '\n'
+            out_fh.write(word_salad)
+        out_fh.close()
+        in_fh.close()
+
 
 def split_with_space(inputFilePath, outputFilePath, splitLength):
     with open(inputFilePath, 'r') as f:  # filePath = 'alice_oz.txt', splitLength = 136
@@ -134,10 +183,13 @@ def main(argv):
     english_text_136_without_spaces_file = 'english_text_136_without_spaces.txt'
     pos_text_136_with_spaces_file = 'pos_text_136_with_spaces.txt'
     junk1_file = 'junk1.txt'
+    word_salad_136_with_spaces_file = 'word_salad_136_with_spaces.txt'
+    pos_word_salad_136_with_spaces_file = 'pos_word_salad_136_with_spaces.txt'
 
     # remove these files to generate fresh
     file_list_to_delete = [english_text_136_with_spaces_file, english_text_136_without_spaces_file,
-                           pos_text_136_with_spaces_file, junk1_file]
+                           pos_text_136_with_spaces_file, junk1_file, word_salad_136_with_spaces_file,
+                           pos_word_salad_136_with_spaces_file]
 
     for i in range(len(file_list_to_delete)):
         if os.path.exists(file_list_to_delete[i]):
@@ -155,6 +207,12 @@ def main(argv):
     #
     # parse file with 136 len sequence to geneate POS
     process_POS(english_text_136_with_spaces_file, pos_text_136_with_spaces_file)
+
+    # 19 is a random seed
+    ws = WordSaladGeneration(19)
+    ws.generate(english_text_136_with_spaces_file, word_salad_136_with_spaces_file)
+
+    process_POS(word_salad_136_with_spaces_file, pos_word_salad_136_with_spaces_file)
 
 
 if __name__ == "__main__":
