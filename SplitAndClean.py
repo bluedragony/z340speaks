@@ -5,13 +5,12 @@
 
 # Function to return a splitted 136 character file at outputFilePath provided
 
-# In[75]:
+# In[76]:
 
 
 def split_with_space(inputFilePath,outputFilePath, splitLength):    
     with open(inputFilePath, 'r') as f:          # filePath = 'alice_oz.txt', splitLength = 136
-        textData = f.read()                   
-    #print(textData)
+        textData = f.read() 
     textEach = ""                         # initialize
     textWordCount = 0                  # initialize      
     textWords = textData.split(" ")        # All words in the text
@@ -26,20 +25,19 @@ def split_with_space(inputFilePath,outputFilePath, splitLength):
                     f.write('\n')
                 textEach = word          # reset for the next line
                 textWordCount = len(word)   # reset for the next line
-    print("text each is: ",textEach)
     if(textEach!=""):
         with open(outputFilePath, 'a+') as f:     #outputFilePath = 'newFile.txt'
             f.write(textEach)
             f.write('\n')
 
-split_with_space('alice_oz.txt','newFile.txt',136)
+split_with_space('alice_oz.txt','136-split-English text.txt',136)
 
 
 # #  RemoveSpaces(inputFilePath,outputFilePath)
 
 # returns without space file at the outputFilePath location 
 
-# In[74]:
+# In[77]:
 
 
 def RemoveSpaces(inputFilePath,outputFilePath):    
@@ -51,5 +49,5 @@ def RemoveSpaces(inputFilePath,outputFilePath):
             f.write(s)
             f.write('\n')
 
-RemoveSpaces('newFile_1.txt', "finalWithotSpace.txt")
+RemoveSpaces('136-split-English text.txt', "136-english-text-without-space.txt")
 
