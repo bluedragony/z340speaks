@@ -2,6 +2,7 @@ import os
 import sys
 
 import random
+from nltk.util import ngrams
 
 
 class WordSaladGeneration:
@@ -177,14 +178,39 @@ def get_parts_of_speech_tags(sentence):
     return word_tag
 
 
+def process_n_grams(n, inFile, outFile):
+    with open(outFile, 'w') as outFile:
+        with open(inFile, "r") as f:
+            content = f.readlines()
+            n_gram = ""
+            for line in content:
+                line = line.rstrip().lstrip()
+                n_gram_op = generate_n_grams(line, n)
+                n_gram_op = [''.join(gram) for gram in n_gram_op]
+                n_gram += str(n_gram_op).replace('\'', '').replace(',', '') + '\n'
+            outFile.write(str(n_gram))
+    f.close()
+    outFile.close()
+
+
+def generate_n_grams(text, n):
+    # if you want word-grams and not character-grams: token = nltk.word_tokenize(text); n_grams = ngrams(token, n)
+    n_grams = ngrams(text, n)
+    return list(n_grams)
+
+
 def main(argv):
     input_corpus_file = 'alice_oz.txt'
     english_text_136_with_spaces_file = 'english_text_136_with_spaces.txt'
     english_text_136_without_spaces_file = 'english_text_136_without_spaces.txt'
     pos_text_136_with_spaces_file = 'pos_text_136_with_spaces.txt'
+    n_grams_136_english_text_file = 'n_grams_136_english_text.txt'
+
     junk1_file = 'junk1.txt'
     word_salad_136_with_spaces_file = 'word_salad_136_with_spaces.txt'
+    word_salad_136_without_spaces_file = 'word_salad_136_without_spaces.txt'
     pos_word_salad_136_with_spaces_file = 'pos_word_salad_136_with_spaces.txt'
+    n_grams_136_word_salad_file = 'n_grams_136_word_salad.txt'
 
     # remove these files to generate fresh
     file_list_to_delete = [english_text_136_with_spaces_file, english_text_136_without_spaces_file,
@@ -205,7 +231,13 @@ def main(argv):
     removes_all_spaces(english_text_136_with_spaces_file, english_text_136_without_spaces_file)
 
     #
-    # parse file with 136 len sequence to geneate POS
+    # remove trailing and starting spaces from file
+    remove_training_and_starting_spaces(junk1_file, english_text_136_with_spaces_file)
+
+    removes_all_spaces(english_text_136_with_spaces_file, english_text_136_without_spaces_file)
+    removes_all_spaces(word_salad_136_with_spaces_file, word_salad_136_without_spaces_file)
+
+    # parse file with 136 len sequence to generate POS
     process_POS(english_text_136_with_spaces_file, pos_text_136_with_spaces_file)
 
     # 19 is a random seed
@@ -213,6 +245,9 @@ def main(argv):
     ws.generate(english_text_136_with_spaces_file, word_salad_136_with_spaces_file)
 
     process_POS(word_salad_136_with_spaces_file, pos_word_salad_136_with_spaces_file)
+
+    process_n_grams(7, english_text_136_without_spaces_file, n_grams_136_english_text_file)
+    process_n_grams(7, word_salad_136_without_spaces_file, n_grams_136_word_salad_file)
 
 
 if __name__ == "__main__":
