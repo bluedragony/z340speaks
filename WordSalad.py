@@ -1,4 +1,4 @@
-import random
+import secrets
 
 
 class WordSaladGeneration:
@@ -35,9 +35,9 @@ class WordSaladGeneration:
         with open(file_name, 'r') as file:
             text = file.read().replace('\n', ' ')
 
-        random.seed(self.random_state)
+        secrets.SystemRandom().seed(self.random_state)
         words = text.split()
-        random.shuffle(words)
+        secrets.SystemRandom().shuffle(words)
         word_salad = ' '.join(words)
 
         f = open("word_salad.txt", "a")
