@@ -41,7 +41,7 @@ class WordSaladGeneration:
         in_fh = open(in_file)
         out_fh = open(out_file, 'w')
         while True:
-            line = in_fh.readline().replace('\n', ' ')
+            line = in_fh.readline(5_000_000).replace('\n', ' ')
             if not line:
                 break
             words = line.split()
@@ -90,7 +90,7 @@ def remove_training_and_starting_spaces(in_file, out_file):
     in_fh = open(in_file)
     out_fh = open(out_file, 'w')
     while True:
-        line = in_fh.readline()
+        line = in_fh.readline(5_000_000)
         if not line:
             break
         line = line.lstrip().rstrip() + '\n'
