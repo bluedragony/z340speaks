@@ -1,8 +1,7 @@
 import os
 import sys
-
-import random
 from nltk.util import ngrams
+import secrets
 
 
 class WordSaladGeneration:
@@ -37,7 +36,7 @@ class WordSaladGeneration:
     """
 
     def generate(self, in_file, out_file):
-        random.seed(self.random_state)
+        secrets.SystemRandom().seed(self.random_state)
         in_fh = open(in_file)
         out_fh = open(out_file, 'w')
         while True:
@@ -45,7 +44,7 @@ class WordSaladGeneration:
             if not line:
                 break
             words = line.split()
-            random.shuffle(words)
+            secrets.SystemRandom().shuffle(words)
             word_salad = ' '.join(words) + '\n'
             out_fh.write(word_salad)
         out_fh.close()
